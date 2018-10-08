@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import PantryItem, PantryItemLine, Unit, Category, Location
+from .models import PantryItem, PantryItemLine, Unit, Category, Location, Reservation
 
 
 class PantryItemInLine(admin.TabularInline):
@@ -81,8 +81,27 @@ class PantryItemAdmin(admin.ModelAdmin):
         'info',
     )
 
+class ReservationAdmin(admin.ModelAdmin):
+    list_filter = ["reserved_by", "start_date", "end_date", "item", "amount"]
+    search_fields = ["item"]
+
+    fields = (
+        "reserved_by",
+        ("start_date", "end_date"),
+        ("amount", "item")
+    )
+
+    list_display = (
+        "reserved_by",
+        "start_date",
+        "end_date",
+        "amount",
+        "item"
+    )
+
 admin.site.register(PantryItem, PantryItemAdmin)
 admin.site.register(PantryItemLine, PantryItemLineAdmin)
 admin.site.register(Unit, AutocompleteAdmin)
 admin.site.register(Category, AutocompleteAdmin)
 admin.site.register(Location, LocationAdmin)
+admin.site.register(Reservation, ReservationAdmin)

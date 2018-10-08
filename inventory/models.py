@@ -1,6 +1,5 @@
 from django.db import models
 
-
 class Category(models.Model):
     """A category for a pantry item to be in
     e.g.
@@ -46,7 +45,6 @@ class Location(models.Model):
             return self.name + ' ' + str(self.in_location)
         return self.name
 
-
 class PantryItem(models.Model):
     """A think you keep in your pantry """
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
@@ -66,6 +64,17 @@ class PantryItem(models.Model):
     def __str__(self):
         return self.name
 
+class Reservation(models.Model):
+    """Reservation for an item"""
+    # Use CharField until we have user accounts
+    reserved_by = models.CharField(max_length=200)
+    start_date = models.DateField()
+    end_date = models.DateField()
+    item = models.ForeignKey(PantryItem, on_delete=models.CASCADE)
+    amount = models.IntegerField()
+
+    def __str__(self):
+        return f"Reservation by {self.reserved_by} from {self.start_date} until {self.end_date} for {self.amount} x {self.item}"
 
 class ShoppingListItem(PantryItem):
     """Items to buy now that aren't meant for the pantry but for imidiate usage"""
